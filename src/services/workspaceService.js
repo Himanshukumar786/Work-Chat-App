@@ -99,3 +99,14 @@ export const getWorkspacesUserIsMemberOfService = async (userId) => {
         throw error;
     }
 };
+
+
+export const getWorkspaceService = async (workspaceId, userId) => {}
+
+export const getWorkspaceByJoinCodeService = async (joinCode) => {}
+
+export const updateWorkspaceService = async (workspaceId, workspaceData, userId) => {}
+
+export const addMemberToWorkspaceService = async (workspaceId, memberId, role) => {}
+
+export const addChannelToWorkspaceService = async (workspaceId, channelName) => {}
