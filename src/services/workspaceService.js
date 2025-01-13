@@ -226,11 +226,11 @@ export const getWorkspaceByJoinCodeService = async (joinCode, userId) => {
         });
       }
       const isMember = isUserMemberOfWorkspace(workspace, memberId);
-      if (!isMember) {
+      if (isMember) {
         throw new ClientError({
-          explanation: 'User is not a member of the workspace',
-          message: 'User is not a member of the workspace',
-          statusCode: StatusCodes.UNAUTHORIZED
+            explanation: 'User is already a member of the workspace',
+            message: 'User is already a member of the workspace',
+            statusCode: StatusCodes.UNAUTHORIZED
         });
       }
       const response = await workspaceRepository.addMemberToWorkspace(
