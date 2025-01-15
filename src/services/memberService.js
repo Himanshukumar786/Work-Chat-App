@@ -8,7 +8,15 @@ import { isUserMemberOfWorkspace } from './workspaceService.js';
 
 export const isMemberPartOfWorkspaceService = async (workspaceId, memberId) => {
     const workspace = await workspaceRepository.getById(workspaceId);
-    
+
+    if (!workspace) {
+        throw new ClientError({
+            explanation: 'Workspace not found',
+            message: 'Workspace not found',
+            statusCode: StatusCodes.NOT_FOUND
+        });
+    }
+
     const isUserAMember = isUserMemberOfWorkspace(workspace, memberId);
     if (!isUserAMember) {
         throw new ClientError({
