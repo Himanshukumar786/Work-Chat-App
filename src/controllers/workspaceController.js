@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { addChannelToWorkspaceService, addMemberToWorkspaceService, createWorkspaceService, deleteWorkspaceService, getWorkspaceByJoinCodeService, getWorkspaceService, getWorkspacesUserIsMemberOfService, resetWorkspaceJoinCodeService, updateWorkspaceService } from '../services/workspaceService.js';
+import { addChannelToWorkspaceService, addMemberToWorkspaceService, createWorkspaceService, deleteWorkspaceService, getWorkspaceByJoinCodeService, getWorkspaceService, getWorkspacesUserIsMemberOfService, joinWorkspaceService, resetWorkspaceJoinCodeService, updateWorkspaceService } from '../services/workspaceService.js';
 import {
     customErrorResponse,
     internalErrorResponse,
@@ -188,6 +188,28 @@ export const resetJoinCodeController = async (req, res) => {
       .json(successResponse(response, 'Join code reset successfully'));
   } catch (error) {
     console.log('reset join code controller error', error);
+    if (error.statusCode) {
+      return res.status(error.statusCode).json(customErrorResponse(error));
+    }
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(internalErrorResponse(error));
+  }
+};
+
+export const joinWorkspaceController = async (req, res) => {
+  try {
+    const response = await joinWorkspaceService(
+      req.params.workspaceId,
+      req.body.joinCode,
+      req.user
+    );
+    return res
+      .status(StatusCodes.OK)
+      .json(successResponse(response, 'Joined workspace successfully'));
+  } catch (error) {
+    console.log('join workspace controller error', error);
     if (error.statusCode) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
