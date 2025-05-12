@@ -215,6 +215,24 @@ export const getWorkspaceByJoinCodeService = async (joinCode, userId) => {
     }
   };
   
+
+  export const resetWorkspaceJoinCodeService = async (workspaceId, userId) => {
+    try {
+      const newJoinCode = uuidv4().substring(0, 6).toUpperCase();
+      const updatedWorkspace = await updateWorkspaceService(
+        workspaceId,
+        {
+          joinCode: newJoinCode
+        },
+        userId
+      );
+      return updatedWorkspace;
+    } catch (error) {
+      console.log('resetWorkspaceJoinCodeService error', error);
+      throw error;
+    }
+  };
+
   export const addMemberToWorkspaceService = async (
     workspaceId,
     memberId,

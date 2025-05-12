@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { addChannelToWorkspaceService, addMemberToWorkspaceService, createWorkspaceService, deleteWorkspaceService, getWorkspaceByJoinCodeService, getWorkspaceService, getWorkspacesUserIsMemberOfService, updateWorkspaceService } from '../services/workspaceService.js';
+import { addChannelToWorkspaceService, addMemberToWorkspaceService, createWorkspaceService, deleteWorkspaceService, getWorkspaceByJoinCodeService, getWorkspaceService, getWorkspacesUserIsMemberOfService, resetWorkspaceJoinCodeService, updateWorkspaceService } from '../services/workspaceService.js';
 import {
     customErrorResponse,
     internalErrorResponse,
@@ -128,6 +128,7 @@ export const getWorkspaceByJoinCodeController = async (req, res) => {
         .json(internalErrorResponse(error));
     }
   };
+
   export const addMemberToWorkspaceController = async (req, res) => {
     try {
       const response = await addMemberToWorkspaceService(
@@ -151,6 +152,7 @@ export const getWorkspaceByJoinCodeController = async (req, res) => {
         .json(internalErrorResponse(error));
     }
   };
+
   export const addChannelToWorkspaceController = async (req, res) => {
     try {
       const response = await addChannelToWorkspaceService(
@@ -173,3 +175,25 @@ export const getWorkspaceByJoinCodeController = async (req, res) => {
         .json(internalErrorResponse(error));
     }
   };
+
+
+export const resetJoinCodeController = async (req, res) => {
+  try {
+    const response = await resetWorkspaceJoinCodeService(
+      req.params.workspaceId,
+      req.user
+    );
+    return res
+      .status(StatusCodes.OK)
+      .json(successResponse(response, 'Join code reset successfully'));
+  } catch (error) {
+    console.log('reset join code controller error', error);
+    if (error.statusCode) {
+      return res.status(error.statusCode).json(customErrorResponse(error));
+    }
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(internalErrorResponse(error));
+  }
+};
