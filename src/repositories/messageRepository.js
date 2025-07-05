@@ -6,12 +6,19 @@ const messageRepository = {
 
     getPaginatedMessaged: async (messageParams, page, limit) => {
 
-        const messages = await Message.find(messageParams)
-            .sort({ createdAt: -1 })
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .populate('senderId', 'username email avatar');
-            return messages;
+    const messages = await Message.find(messageParams)
+        .sort({ createdAt: 1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate('senderId', 'username email avatar');
+        return messages;
+    },
+    getMessageDetails: async (messageId) => {
+        const message = await Message.findById(messageId).populate(
+        'senderId',
+        'username email avatar'
+        );
+        return message;
     }
 };
 
